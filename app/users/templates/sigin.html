@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+
+{% load static %}
+
+{% block 'header' %}
+<link rel="stylesheet" href="{% static "css/static.css" %}">
+{% endblock 'header' %}
+
+{% block 'body' %}
+{% if messages %}
+    {% for message in messages %}
+        <section class='alert {{message.tags}}'>
+            {{message}}
+        </section>
+    {% endfor %}
+{% endif %}
+<form action="{% url 'sigin' %}" method="post"> {% csrf_token %}
+    <h1>sigin</h1>
+    <input type="text" name="name">
+    <input type="password" name="password">
+    <input type="password" name="confirm">
+    <button>enviar</button>
+</form>
+{% endblock 'body' %}

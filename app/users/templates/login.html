@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+
+{% load static %}
+
+{% block 'header' %}
+<link rel="stylesheet" href="{% static "css/static.css" %}">
+{% endblock 'header' %}
+
+{% block 'body' %}
+<form action="{% url 'login' %}" method="post"> {% csrf_token %}
+    <h1>login</h1>
+    <input type="text" name="name">
+    <input type="password" name="password">
+    <button>enviar</button>
+</form>
+{% endblock 'body' %}
