@@ -1,0 +1,19 @@
+*{
+    padding: 0;
+    margin: 0;
+}
+
+html, body{
+    display: block;
+    width: 100%;
+    height: 100%;
+}
+
+body{
+    display: flex;
+    flex-flow: column;
+    justify-content: center;
+    align-items: center;
+    background: #678;
+    color: #ddd;
+}

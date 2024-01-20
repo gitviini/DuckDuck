@@ -7,6 +7,7 @@
 {% endblock 'header' %}
 
 {% block 'body' %}
+{% include "message.html" %}
 <form action="{% url 'login' %}" method="post"> {% csrf_token %}
     <h1>login</h1>
     <input type="text" name="name">

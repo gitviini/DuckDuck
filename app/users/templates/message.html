@@ -1,0 +1,9 @@
+{% block 'message' %}
+    {% if messages %}
+        {% for message in messages %}
+            <message class='alert {{message.tags}}'>
+                {{message}}
+            </message>
+        {% endfor %}
+    {% endif %}
+{% endblock 'message' %}

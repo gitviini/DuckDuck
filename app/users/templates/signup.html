@@ -7,15 +7,9 @@
 {% endblock 'header' %}
 
 {% block 'body' %}
-{% if messages %}
-    {% for message in messages %}
-        <section class='alert {{message.tags}}'>
-            {{message}}
-        </section>
-    {% endfor %}
-{% endif %}
-<form action="{% url 'sigin' %}" method="post"> {% csrf_token %}
-    <h1>sigin</h1>
+{% include "message.html" %}
+<form action="{% url 'signup' %}" method="post"> {% csrf_token %}
+    <h1>signup</h1>
     <input type="text" name="name">
     <input type="password" name="password">
     <input type="password" name="confirm">
