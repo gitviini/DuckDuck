@@ -8,10 +8,12 @@
 
 {% block 'body' %}
 {% include "message.html" %}
+<img src="{% static 'img/duck.svg' %}" alt="">
 <form action="{% url 'login' %}" method="post"> {% csrf_token %}
     <h1>login</h1>
     <input type="text" name="name">
     <input type="password" name="password">
-    <button>enviar</button>
+    <button>send</button>
+    <p class="pop">are you not sign? let's <a href="{% url 'signup' %}">signup</a></p>
 </form>
 {% endblock 'body' %}

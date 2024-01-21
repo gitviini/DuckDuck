@@ -28,6 +28,7 @@ form{
 
 h1{
     color: #ddd;
+    padding: 15px;
 }
 
 input, button{
@@ -36,4 +37,18 @@ input, button{
     border: none;
     outline: none;
     margin-bottom: 20px;
+}
+
+.pop{
+    position: fixed;
+    bottom: 10px;
+    color: #aaa;
+}
+
+a{
+    text-decoration: none;
+    color: #f90;
+}
+a:hover{
+    text-decoration: underline;
 }

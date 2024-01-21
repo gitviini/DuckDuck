@@ -1,3 +1,8 @@
 from django.db import models
 
-# Create your models here.
+class IMGs(models.Model):
+    username = models.TextField()
+    binary = models.TextField()
+
+    def __str__(self):
+        return self.user

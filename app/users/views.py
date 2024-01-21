@@ -1,8 +1,24 @@
 from django.shortcuts import render, redirect
+from django.http import HttpResponse, HttpRequest
 from django.contrib.auth.models import User
 from django.contrib import auth
-from django.contrib.messages import constants
 from django.contrib import messages
+from django.contrib.messages import constants
+from users.models import IMGs
+import json
+
+#UTILS
+def add_img(username='', binary=''):
+    try:
+        if username == '' or binary == '':
+            return 'failed'
+        else:
+            img = IMGs(username=username,binary=binary)
+            img.save()
+            return 'success'
+    except Exception as erro: 
+        print(f'add_img:. {erro}')
+        return None
 
 def index(req):
     return redirect('login')
@@ -66,4 +82,29 @@ def signup(req):
     return render(req, 'signup.html')
 
 def perfil(req):
+    return render(req, template_name='perfil.html')
+
+def img(req):
+    if req.method == 'GET':
+        pass
+    else:
+        #print(username, binary)
+
+        data = json.loads(req.body)
+
+        username = data['username']
+        binary = data['binary']
+
+        message = add_img(username, binary)
+        print(message)
+        if message != None:
+            match message:
+                case 'failed':
+                    messages.add_message(
+                        req, constants.ERROR, message
+                    )
+                case 'success':
+                    messages.add_message(
+                        req, constants.SUCCESS, message
+                    )
     return render(req, template_name='perfil.html')

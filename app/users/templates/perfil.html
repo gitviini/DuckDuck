@@ -3,11 +3,14 @@
 {% load static %}
 
 {% block 'header' %}
-    <link rel="stylesheet" href="{% static 'css/perfil.css' %}">
+    <link rel="stylesheet" href="{% static 'css/static.css' %}">
 {% endblock 'header' %}
 
 {% block 'body' %}
 
 {% include "message.html" %}
-    perfil
+    <input type="hidden" name="csrftoken" value="{% csrf_token %}">
+    <input type="file" name="file">
+    <button>send</button>
+<script src='{% static "js/perfil.js" %}'></script>
 {% endblock 'body' %}
