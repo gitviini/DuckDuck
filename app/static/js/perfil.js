@@ -1,5 +1,8 @@
-
 const csrf = document.cookie.split('=')[1]
+const username = document.querySelector("input[name='username']").value
+const binary = document.querySelector('input[name="binary"]').value
+
+document.querySelector("img").src = binary
 
 function get_csrf(){
     token = document.cookie.split('=')[1]
@@ -17,7 +20,7 @@ button.addEventListener('click',()=>{
     files.onload = (load)=>{
         var data = {    
             csrfmiddlewaretoken: get_csrf(),
-            username:'vini',
+            username:username,
             binary: load.target.result,
         }
 

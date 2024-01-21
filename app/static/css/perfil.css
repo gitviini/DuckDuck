@@ -14,6 +14,13 @@ body{
     flex-flow: column;
     justify-content: center;
     align-items: center;
-    background: #678;
+    background: #456;
     color: #ddd;
+}
+
+img{
+    display: block;
+    width: 50px;
+    height: 50px;
+    border-radius: 100px;
 }

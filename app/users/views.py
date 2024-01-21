@@ -36,7 +36,7 @@ def login(req):
                 messages.add_message(
                     req, constants.SUCCESS, f'user: {name} loged'
                 )
-                return redirect('perfil')
+                return redirect(f'/perfil/{name}')
             except:
                 messages.add_message(
                     req, constants.ERROR, 'error in server'
@@ -81,12 +81,22 @@ def signup(req):
 
     return render(req, 'signup.html')
 
-def perfil(req):
-    return render(req, template_name='perfil.html')
+def perfil(req, name=''):
+    binary = ''
+    try:
+        img = IMGs.objects.get(username=name) 
+        binary = img.binary
+    except:
+        messages.add_message(
+            req, constants.WARNING, 'add your photo'
+        )
+    return render(req, template_name='perfil.html', context={'name':name, 'binary':binary})
 
 def img(req):
     if req.method == 'GET':
-        pass
+        img = IMGs.objects.get(username='biel')
+        binary = img.binary
+        return render(req, template_name='perfil.html', context={'binary':binary})
     else:
         #print(username, binary)
 
