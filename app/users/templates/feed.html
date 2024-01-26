@@ -1,0 +1,83 @@
+{% extends "base.html" %}
+
+{% load static %}
+
+{% block 'header' %}
+<link rel="stylesheet" href="{% static "css/feed.css" %}">
+<link rel="stylesheet" href="{% static 'css/font-awesome/css/font-awesome.min.css' %}">
+{% endblock 'header' %}
+
+{% block 'body' %}
+<main>
+    <div id="left">
+        <div id="perfil">
+            <span class="fa fa-user-circle fa-2x"></span>
+            <span>perfil</span>
+        </div>
+        <div id="chat">
+            <span class="fa fa-keyboard-o fa-2x"></span>
+            <span>chat</span>
+        </div>
+        <div id="chat_content">
+            <div class="content">
+                <span class="fa fa-user-o"></span>
+                <span>Hi. How are you?</span>
+            </div>
+        </div>
+    </div>
+    <div id="middle">
+        <p id="feed"><span class="fa fa-bookmark-o"></span>feed</p>
+        <div id="feed_content">
+            <div class="content">
+                <img src="{% static 'img/bg.png' %}" alt="">
+                <p class="date"><span class="fa fa-calendar"></span>28/01/2006</p>
+            </div>
+        </div>
+    </div>
+    <div id="right"></div>
+</main>
+<script>
+
+    function get_csrf(){
+        token = document.cookie.split('=')[1]
+        return token
+    }
+
+    function call(){
+        fetch('{% url "get_feed" %}', {
+            method:'GET',
+            headers:{'X-CSRFToken':get_csrf()},
+        })
+        .then((resp)=>resp.json().then(body=>generate_feed(body)))
+        .catch(error=>console.log(error))
+    }
+
+    function generate_feed(body={}){
+        try{
+            tam = body.img.length
+            for(let n = 0; n < tam; n++){
+                let content = document.createElement('div')
+                content.setAttribute('class','content')
+                let img = document.createElement('img')
+                img.src = body.img[n]
+                img.alt = body.name[n]
+                let date = document.createElement('p')
+                date.setAttribute('class','date')
+                date.innerHTML = `<span class='fa fa-calendar'></span>${body.date[n]}`
+                content.appendChild(img)
+                content.appendChild(date)
+                feed.appendChild(content)
+            }
+        }
+        catch{
+            error=>console.log(error)
+        }
+    }
+
+    const feed = document.querySelector('#feed_content')
+
+    call()
+
+    var date = document.createElement('p')
+</script>
+{% endblock 'body' %}

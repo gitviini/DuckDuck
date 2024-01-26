@@ -42,13 +42,14 @@ input, button{
 .pop{
     position: fixed;
     bottom: 10px;
-    color: #aaa;
+    color: #ddd;
 }
 
-a{
+.pop a{
     text-decoration: none;
     color: #f90;
 }
-a:hover{
+
+.pop a:hover{
     text-decoration: underline;
 }

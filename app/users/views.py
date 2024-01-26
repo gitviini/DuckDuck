@@ -1,10 +1,11 @@
 from django.shortcuts import render, redirect
-from django.http import HttpResponse, HttpRequest
+from django.http import HttpResponse, HttpRequest, JsonResponse
 from django.contrib.auth.models import User
 from django.contrib import auth
 from django.contrib import messages
 from django.contrib.messages import constants
 from users.models import IMGs
+from users.models import imgs_feed
 import json
 
 #UTILS
@@ -29,26 +30,30 @@ def login(req):
     else:
         name = req.POST['name']
         password = req.POST['password']
-        user = auth.authenticate(req, username=name, password=password)
-        if user:
-            try:
-                auth.login(req, user=user)
-                messages.add_message(
-                    req, constants.SUCCESS, f'user: {name} loged'
-                )
-                return redirect(f'/perfil/{name}')
-            except:
-                messages.add_message(
-                    req, constants.ERROR, 'error in server'
-                )
-        else:
+        if not User.objects.filter(username=name).exists():
             messages.add_message(
-                req, level=constants.ERROR, message='name or password incorrect'
+                req, constants.ERROR, 'user no exists'
             )
+        else:
+            user = auth.authenticate(req, username=name, password=password)
+            if user:
+                try:
+                    auth.login(req, user=user)
+                    messages.add_message(
+                        req, constants.SUCCESS, f'user: {name} loged'
+                    )
+                    return redirect(f'/perfil/{name}')
+                except:
+                    messages.add_message(
+                        req, constants.ERROR, 'error in server'
+                    )
+            else:
+                messages.add_message(
+                    req, level=constants.ERROR, message='name or password incorrect'
+                )
     return render(req, 'login.html')
 
-def signup(req): 
-
+def signup(req):
     if req.method == 'GET':
         pass
     else:
@@ -66,6 +71,7 @@ def signup(req):
                         messages.add_message(
                             req, constants.SUCCESS, 'sigin sucess'
                         )
+                        return redirect(f'/perfil/{name}')
                     except:
                         messages.add_message(
                             req, constants.ERROR, 'server failed'
@@ -118,3 +124,27 @@ def img(req):
                         req, constants.SUCCESS, message
                     )
     return render(req, template_name='perfil.html')
+
+def feed(req):
+    return render(req, template_name='feed.html')
+
+def get_feed(req):
+    if req.method == 'GET':
+        print(imgs_feed.objects.all())
+        body = {
+            'img':['holder','holder','holder','holder'],
+            'name':['vini','gold','mari','biel'],
+            'date':['28/01/2006','29/01/2006','10/01/2006','28/01/2005'],
+        }
+        return JsonResponse(data=body)
+    else:
+        try:
+            data = json.loads(req.body)
+            #get datas from client side
+            imgs_feed(auth=data['name'],binary=data['binary'],date=data['date'],comments='')
+            #send in imgs_feed database model
+            return JsonResponse(data='ok')
+            #return response
+        except:
+            return JsonResponse(data='fail')
+    

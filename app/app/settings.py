@@ -66,7 +66,8 @@ TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         'DIRS': [
-            path.join(BASE_DIR,'templates/')
+            #path.join(BASE_DIR,'templates/'),
+            path.join(BASE_DIR,'users/templates/')
         ],
         'APP_DIRS': True,
         'OPTIONS': {
@@ -127,10 +128,10 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.0/howto/static-files/
 
-STATIC_URL = 'static/'
+STATIC_URL = 'users/templates/static/'
 
 STATICFILES_DIRS = [
-    path.join(BASE_DIR,'static/')
+    path.join(BASE_DIR,STATIC_URL)
 ]
 
 MEDIA_URL = 'media/'

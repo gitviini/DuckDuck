@@ -1,0 +1,157 @@
+:root{
+    --bg: #123;
+    --border: #789;
+    --hover: #678;
+    --color: #fff;
+    scroll-behavior: smooth;
+    scrollbar-color: var(--border) var(--bg);
+    scrollbar-width: thin;
+}
+
+*{
+    padding: 0;
+    margin: 0;
+}
+
+html, body{
+    display: block;
+    width: 100%;
+    height: 100%;
+    font-family: 'Courier New', Courier, monospace;
+}
+
+main{
+    display: grid;
+    width: 100%;
+    height: 100%;
+    grid-template-columns: 200px minmax(100px, 500px) 200px;
+    grid-template-rows: 1fr;
+    justify-content: center;
+    align-items: center;
+    background-color: var(--bg);
+    overflow: hidden;
+}
+
+#left, #middle, #right{
+    display: flex;
+    width: calc(100% - 10px);
+    height: calc(100% - 10px);
+    flex-flow: column;
+    justify-content: flex-start;
+    padding: 5px;
+    overflow: hidden;
+}
+
+#left{
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: 60px 60px calc(100% - 120px);
+}
+
+#perfil, #chat{
+    display: flex;
+    width: 100%;
+    height: 100%;
+    flex-flow: row;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    color: var(--color);
+    gap: 10px;
+}
+
+#perfil{
+    background-color: var(--border);
+    color: #fff;
+    border-radius: 50px;
+    transition: 0.2s;
+}
+
+#chat_content{
+    display: flex;
+    width: 100%;
+    height: 100%;
+    flex-flow: column nowrap;
+    justify-content: flex-start;
+    align-items: center;
+    overflow: hidden scroll;
+}
+
+#chat_content .content{
+    display: flex;
+    width: calc(100% - 5px);
+    height: 60px;
+    min-height: 60px;
+    flex-flow: row nowrap;
+    justify-content: flex-start;
+    align-items: center;
+    padding: 0 0 0 5px;
+    background-color: var(--border);
+    color: #ddd;
+    margin: 0 0 5px 0;
+    border-radius: 10px;
+    cursor: pointer;
+    gap: 5px;
+    transition: 0.2s;
+}
+
+#chat_content .content:hover{
+    background-color: var(--hover);
+}
+
+#middle{
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: 60px calc(100% - 60px);
+}
+
+#feed{
+    display: flex;
+    width: 100%;
+    height: 100%;
+    flex-flow: row nowrap;
+    justify-content: center;
+    align-items: center;
+    color: var(--color);
+    gap: 5px;
+}
+
+#feed_content{
+    display: flex;
+    width: 100%;
+    height: 100%;
+    flex-flow: column;
+    justify-content: flex-start;
+    align-items: center;
+    overflow: hidden scroll;
+}
+
+#feed_content .content{
+    display: flex;
+    width: 100%;
+    height: 400px;
+    flex-flow: column;
+    justify-content: center;
+    align-items: center;
+}
+
+#feed_content .content img{
+    display: block;
+    width: 100%;
+    height: 360px;
+    border-radius: 10px;
+    border: none;
+    outline: none;
+    background-color: var(--border);
+}
+
+#feed_content .content .date{
+    display: flex;
+    width: 100%;
+    height: 30px;
+    flex-flow: row;
+    justify-content: flex-start;
+    align-items: center;
+    color: var(--color);
+    gap: 5px;
+}
