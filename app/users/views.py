@@ -21,39 +21,46 @@ def add_img(username='', binary=''):
         return None
 
 def index(req):
-    return redirect('login')
+    try:
+        name = req.session.get('name')
+        if name: return redirect(f'/perfil/{name}')
+    except: return redirect('login')
 
 def login(req):
-    if req.method == 'GET':
-        pass
-    else:
-        name = req.POST['name']
-        password = req.POST['password']
-
-        req.session['name'] = name
-
-        if not User.objects.filter(username=name).exists():
-            messages.add_message(
-                req, constants.ERROR, 'user no exists'
-            )
+    try:
+        name = req.session.get('name')
+        if name: return redirect(f'/perfil/{name}')
+    except: 
+        if req.method == 'GET':
+            pass
         else:
-            user = auth.authenticate(req, username=name, password=password)
-            if user:
-                try:
-                    auth.login(req, user=user)
-                    messages.add_message(
-                        req, constants.SUCCESS, f'user: {name} loged'
-                    )
-                    return redirect(f'/perfil/{name}')
-                except:
-                    messages.add_message(
-                        req, constants.ERROR, 'error in server'
-                    )
-            else:
+            name = req.POST['name']
+            password = req.POST['password']
+
+            req.session['name'] = name
+
+            if not User.objects.filter(username=name).exists():
                 messages.add_message(
-                    req, level=constants.ERROR, message='name or password incorrect'
+                    req, constants.ERROR, 'user no exists'
                 )
-    return render(req, 'login.html')
+            else:
+                user = auth.authenticate(req, username=name, password=password)
+                if user:
+                    try:
+                        auth.login(req, user=user)
+                        messages.add_message(
+                            req, constants.SUCCESS, f'user: {name} loged'
+                        )
+                        return redirect(f'/perfil/{name}')
+                    except:
+                        messages.add_message(
+                            req, constants.ERROR, 'error in server'
+                        )
+                else:
+                    messages.add_message(
+                        req, level=constants.ERROR, message='name or password incorrect'
+                    )
+        return render(req, 'login.html')
 
 def signup(req):
     if req.method == 'GET':

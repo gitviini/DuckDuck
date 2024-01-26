@@ -2,7 +2,7 @@ const csrf = document.cookie.split('=')[1]
 const username = document.querySelector("input[name='username']").value
 const binary = document.querySelector('input[name="binary"]').value
 
-document.querySelector("img").src = binary
+document.querySelector("#img").src = binary
 
 function get_csrf(){
     token = document.cookie.split('=')[1]
