@@ -1,8 +1,7 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponse, HttpRequest, JsonResponse
 from django.contrib.auth.models import User
-from django.contrib import auth
-from django.contrib import messages
+from django.contrib import auth, messages
 from django.contrib.messages import constants
 from users.models import IMGs
 from users.models import imgs_feed
@@ -30,6 +29,9 @@ def login(req):
     else:
         name = req.POST['name']
         password = req.POST['password']
+
+        req.session['name'] = name
+
         if not User.objects.filter(username=name).exists():
             messages.add_message(
                 req, constants.ERROR, 'user no exists'
@@ -89,6 +91,7 @@ def signup(req):
 
 def perfil(req, name=''):
     binary = ''
+    print(req.session.get('name'))
     try:
         img = IMGs.objects.get(username=name) 
         binary = img.binary
