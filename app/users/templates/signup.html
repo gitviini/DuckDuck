@@ -12,9 +12,9 @@
 <img src="{% static 'img/duck.svg' %}" alt="">
 <form action="{% url 'signup' %}" method="post"> {% csrf_token %}
     <h1>signup</h1>
-    <input type="text" name="name">
-    <input type="password" name="password">
-    <input type="password" name="confirm">
+    <input type="text" name="name" placeholder="name" minlength="4" maxlength="20" required>
+    <input type="password" name="password" placeholder="password" minlength="8" maxlength="20" required>
+    <input type="password" name="confirm" placeholder="confirm" minlength="8" maxlength="20" required>
     <button>send</button>
     <p class="pop">are you sign? let's <a href="{% url 'login' %}">login</a></p>
 </form>

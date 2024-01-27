@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from django.http import HttpResponse, HttpRequest, JsonResponse
+from django.http import JsonResponse
 from django.contrib.auth.models import User
 from django.contrib import auth, messages
 from django.contrib.messages import constants
@@ -13,54 +13,48 @@ def add_img(username='', binary=''):
         if username == '' or binary == '':
             return 'failed'
         else:
-            img = IMGs(username=username,binary=binary)
-            img.save()
+            IMGs.objects.update_or_create(
+                username=username,
+                defaults={'binary':binary})
             return 'success'
     except Exception as erro: 
         print(f'add_img:. {erro}')
         return None
 
 def index(req):
-    try:
-        name = req.session.get('name')
-        if name: return redirect(f'/perfil/{name}')
-    except: return redirect('login')
+    return redirect('/login')
 
 def login(req):
-    try:
-        name = req.session.get('name')
-        if name: return redirect(f'/perfil/{name}')
-    except: 
-        if req.method == 'GET':
-            pass
+    if req.method == 'GET':
+        pass
+    else:
+        name = req.POST['name']
+        password = req.POST['password']
+
+        req.session['name'] = name
+
+        if not User.objects.filter(username=name).exists():
+            messages.add_message(
+                req, constants.ERROR, 'user no exists'
+            )
         else:
-            name = req.POST['name']
-            password = req.POST['password']
-
-            req.session['name'] = name
-
-            if not User.objects.filter(username=name).exists():
-                messages.add_message(
-                    req, constants.ERROR, 'user no exists'
-                )
-            else:
-                user = auth.authenticate(req, username=name, password=password)
-                if user:
-                    try:
-                        auth.login(req, user=user)
-                        messages.add_message(
-                            req, constants.SUCCESS, f'user: {name} loged'
-                        )
-                        return redirect(f'/perfil/{name}')
-                    except:
-                        messages.add_message(
-                            req, constants.ERROR, 'error in server'
-                        )
-                else:
+            user = auth.authenticate(req, username=name, password=password)
+            if user:
+                try:
+                    auth.login(req, user=user)
                     messages.add_message(
-                        req, level=constants.ERROR, message='name or password incorrect'
+                        req, constants.SUCCESS, f'user: {name} loged'
                     )
-        return render(req, 'login.html')
+                    return redirect(f'/perfil/{name}')
+                except:
+                    messages.add_message(
+                        req, constants.ERROR, 'error in server'
+                    )
+            else:
+                messages.add_message(
+                    req, level=constants.ERROR, message='name or password incorrect'
+                )
+    return render(req, 'login.html')
 
 def signup(req):
     if req.method == 'GET':
@@ -97,8 +91,10 @@ def signup(req):
     return render(req, 'signup.html')
 
 def perfil(req, name=''):
+    if req.method == 'POST': 
+        data = json.loads(req.body)
+        print(data['bio'])
     binary = ''
-    print(req.session.get('name'))
     try:
         img = IMGs.objects.get(username=name) 
         binary = img.binary
@@ -158,3 +154,13 @@ def get_feed(req):
         except:
             return JsonResponse(data='fail')
     
+def logout(req):
+    try:
+        messages.add_message(
+            req, constants.SUCCESS, f'user: {req.session["name"]} logout'
+        )
+        del req.session['name']
+        print(req.session['name'])
+        return redirect('/login')
+    except: pass
+    return redirect('/login')

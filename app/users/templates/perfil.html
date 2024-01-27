@@ -4,20 +4,42 @@
 
 {% block 'header' %}
     <link rel="stylesheet" href="{% static 'css/font-awesome/css/font-awesome.min.css' %}">
-    <link rel="stylesheet" href="{% static 'css/perfi.css' %}">
+    <link rel="stylesheet" href="{% static 'css/perfil.css' %}">
 {% endblock 'header' %}
 
-{% include "message.html" %}
-
 {% block 'body' %}
+<section class="popup">
+    <img src="" alt="">
+    <form action="#" method="post">
+        <input type="hidden" name="username" value="{{name}}">
+        <input type="file" name="" id="">
+        <button>send</button>
+    </form>
+</section>
 <main>
-    <div id="settings">
+    <div id="perfil">
         <nav>
+            <img src="https://i.pinimg.com/736x/5d/82/5d/5d825d5590e0b0ad9a3024e96ffef5d1.jpg" alt="background" id="background">
+            <img src="
+                {% if binary %}
+                    {{binary}}
+                {% endif %}
+            " alt="
+                {% if binary %}
+                    photo
+                {% else %}
+                    add photo
+                {% endif %}
+            " id="photo_perfil">
             <ul>
-                <li id="perfil">
-                    <p><span class="fa fa-user-o fa-2x"></span>{{name}}</p>
+                <li id="name">{{name}}</li>
+                <li id="bio">
+                    {% if bio %}
+                        {{bio}}
+                    {% else %}
+                        <p id="add_bio">add your bio <span class="fa fa-pencil"></span></p>
+                    {% endif %}
                 </li>
-                <li id="set_perfil"><p><span class="fa fa-cog fa-2x" href="#"></span>setup perfil</p></li>
             </ul>
         </nav>
     </div>
@@ -32,18 +54,8 @@
                 <img src="data:image/jpeg;base64,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" alt="">
                 <p><span class="fa fa-calendar"></span>28/01/2006</p>
             </div>
-            <div class="content">
-                <img src="data:image/jpeg;base64,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" alt="">
-                <p><span class="fa fa-calendar"></span>28/01/2006</p>
-            </div>
         </div>
     </div>
 </main>
-<!--    <img src="" alt="">
-    <input type="hidden" name="username" value="{{name}}">
-    <input type="hidden" name="binary" value="{{binary}}">
-    <input type="file" name="file">
-    <button>send</button>
--->
-<script src='{% static "js/perfil.js" %}'></script>
+<script src='{% static "js/perfi.js" %}'></script>
 {% endblock 'body' %}
