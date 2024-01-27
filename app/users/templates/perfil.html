@@ -5,17 +5,12 @@
 {% block 'header' %}
     <link rel="stylesheet" href="{% static 'css/font-awesome/css/font-awesome.min.css' %}">
     <link rel="stylesheet" href="{% static 'css/perfil.css' %}">
+    <link rel="stylesheet" href="{% static 'css/modal.css' %}">
 {% endblock 'header' %}
 
 {% block 'body' %}
-<section class="popup">
-    <img src="" alt="">
-    <form action="#" method="post">
-        <input type="hidden" name="username" value="{{name}}">
-        <input type="file" name="" id="">
-        <button>send</button>
-    </form>
-</section>
+{% include 'modals/message.html' %}
+{% include 'modals/photo.html' %}
 <main>
     <div id="perfil">
         <nav>
@@ -57,5 +52,6 @@
         </div>
     </div>
 </main>
-<script src='{% static "js/perfi.js" %}'></script>
+<script src='{% static "js/perfil.js" %}'></script>
+<script src="{% static 'js/modals.js' %}"></script>
 {% endblock 'body' %}

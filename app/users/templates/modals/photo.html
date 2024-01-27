@@ -1,0 +1,17 @@
+{% load static %}
+
+{% block 'photo'%}
+<div class="view">
+    <section class="popup">
+        <div class="exit"><h1>add photo</h1><span class="fa fa-close"></span></div>
+        <img src="" alt="">
+        <form action="#" method="post">
+            <label for="file">choose file</label>
+            <input type="hidden" name="username" value="{{name}}">
+            <input type="hidden" name="url" value="{% url 'img' %}">
+            <input type="file" name="file" id="file">
+            <button>send</button>
+        </form>
+    </section>
+</div>
+{% endblock %}

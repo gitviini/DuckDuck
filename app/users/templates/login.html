@@ -8,7 +8,7 @@
 {% endblock 'header' %}
 
 {% block 'body' %}
-{% include "message.html" %}
+{% include "modals/message.html" %}
 <img src="{% static 'img/duck.svg' %}" alt="">
 <form action="{% url 'login' %}" method="post"> {% csrf_token %}
     <h1>login</h1>

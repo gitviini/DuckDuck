@@ -2,6 +2,7 @@ const csrf = document.cookie.split('=')[1]
 const username = document.querySelector("input[name='username']").value
 const add_bio = document.querySelector("#add_bio")
 
+
 add_bio.addEventListener('click', ()=>{
     value = prompt('new bio')
 
@@ -20,13 +21,6 @@ function get_csrf(){
     token = document.cookie.split('=')[1]
     return token
 }
-
-const photo = document.querySelector('#photo_perfil')
-
-photo.addEventListener('click', ()=>{
-    document.querySelector('.popup').classList.add('click')
-    console.log('oi')
-})
 
 document.querySelector('.popup input[type="file"]').addEventListener('change',()=>{
     let fr = new FileReader
