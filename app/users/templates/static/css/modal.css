@@ -140,4 +140,5 @@ message{
     animation-name: 'popup';
     animation-duration: 4s;
     animation-play-state: running;
+    z-index: 3;
 }

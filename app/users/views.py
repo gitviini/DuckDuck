@@ -31,7 +31,8 @@ def login(req):
         name = req.POST['name']
         password = req.POST['password']
 
-        req.session['name'] = name
+        resp = redirect(f'/perfil/{name}')
+        resp.set_cookie('name', name)
 
         if not User.objects.filter(username=name).exists():
             messages.add_message(
@@ -45,7 +46,7 @@ def login(req):
                     messages.add_message(
                         req, constants.SUCCESS, f'user: {name} loged'
                     )
-                    return redirect(f'/perfil/{name}')
+                    return resp
                 except:
                     messages.add_message(
                         req, constants.ERROR, 'error in server'
@@ -90,10 +91,11 @@ def signup(req):
 
     return render(req, 'signup.html')
 
-def perfil(req, name=''):
+def perfil(req):
     if req.method == 'POST': 
         data = json.loads(req.body)
         print(data['bio'])
+    name = req.COOKIES['name']
     binary = ''
     try:
         img = IMGs.objects.get(username=name) 
@@ -132,7 +134,10 @@ def img(req):
     return render(req, template_name='perfil.html')
 
 def feed(req):
-    return render(req, template_name='feed.html')
+    name = req.COOKIES['name']
+    img = IMGs.objects.get(username=name) 
+    binary = img.binary
+    return render(req, template_name='feed.html', context={'binary':binary})
 
 def get_feed(req):
     if req.method == 'GET':

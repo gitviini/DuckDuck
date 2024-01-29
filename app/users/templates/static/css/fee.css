@@ -1,10 +1,16 @@
+@keyframes background {
+    0%{background-position: 0% 0%;}
+    50%{background-position: 100% 100%;}
+    100%{background-position: 0% 0%;}
+}
+
 :root{
-    --bg: #123;
-    --border: #789;
-    --hover: #678;
+    --bg: #1F2544;
+    --border: #FFD0EC;
+    --hover: #81689D;
     --color: #fff;
     scroll-behavior: smooth;
-    scrollbar-color: var(--border) var(--bg);
+    scrollbar-color: transparent transparent;
     scrollbar-width: thin;
 }
 
@@ -21,38 +27,54 @@ html, body{
 }
 
 main{
-    display: grid;
+    display: flex;
     width: 100%;
     height: 100%;
-    grid-template-columns: 200px minmax(100px, 500px) 200px;
-    grid-template-rows: 1fr;
     justify-content: center;
     align-items: center;
+    overflow: hidden;
     background-color: var(--bg);
+    /*background-image: linear-gradient(45deg, #1F2544, #474F7A, #81689D, #FFD0EC);
+    background-size: 400% 400%;
+    animation-name: 'background';
+    animation-duration: 5s;
+    animation-play-state: running;
+    animation-iteration-count: infinite;*/
+}
+
+#space{
+    display: grid;
+    width: 100%;
+    max-width: 750px;
+    height: 100%;
+    grid-template-columns: 0.5fr 1fr;
+    grid-template-rows: 1fr;
+    justify-content: center;
+    backdrop-filter: blur(5px);
+    align-items: center;
     overflow: hidden;
 }
 
-#left, #middle, #right{
+#left, #middle{
     display: flex;
-    width: calc(100% - 10px);
-    height: calc(100% - 10px);
+    width: calc(100% - 40px);
+    height: calc(100% - 40px);
     flex-flow: column;
     justify-content: flex-start;
-    padding: 5px;
+    padding: 20px;
     overflow: hidden;
 }
 
 #left{
     display: grid;
     grid-template-columns: 1fr;
-    grid-template-rows: 60px 60px calc(100% - 120px);
+    grid-template-rows: 180px 60px calc(100% - 300px) 60px;
 }
 
 #perfil, #chat{
     display: flex;
     width: 100%;
     height: 100%;
-    flex-flow: row;
     justify-content: center;
     align-items: center;
     cursor: pointer;
@@ -60,11 +82,25 @@ main{
     gap: 10px;
 }
 
+#chat{
+    flex-flow: row;
+    justify-content: left;
+    padding: 0 0 0 10px;
+}
+
 #perfil{
-    background-color: var(--border);
+    flex-flow: column;
     color: #fff;
-    border-radius: 50px;
+    border-radius: 20px;
     transition: 0.2s;
+}
+
+#perfil img{
+    display: block;
+    width: 80px;
+    height: 80px;
+    background-color: var(--border);
+    border-radius: 50%;
 }
 
 #chat_content{
@@ -87,7 +123,7 @@ main{
     align-items: center;
     padding: 0 0 0 5px;
     background-color: var(--border);
-    color: #ddd;
+    color: var(--bg);
     margin: 0 0 5px 0;
     border-radius: 10px;
     cursor: pointer;
@@ -97,12 +133,31 @@ main{
 
 #chat_content .content:hover{
     background-color: var(--hover);
+    color: #ddd;
+}
+
+#config{
+    display: flex;
+    width: 100%;
+    height: 60px;
+    flex-flow: row nowrap;
+    justify-content: center;
+    align-items: center;
+    color: var(--color);
+}
+
+#config p{
+    display: flex;
+    flex-flow: row nowrap;
+    justify-content: center;
+    align-items: center;
+    gap: 5px;
 }
 
 #middle{
     display: grid;
     grid-template-columns: 1fr;
-    grid-template-rows: 60px calc(100% - 60px);
+    grid-template-rows: 1fr;
 }
 
 #feed{
@@ -113,23 +168,26 @@ main{
     justify-content: center;
     align-items: center;
     color: var(--color);
+    border-bottom: 2px solid var(--border);
     gap: 5px;
 }
 
 #feed_content{
     display: flex;
     width: 100%;
-    height: 100%;
+    height: calc(100% - 20px);
+    padding: 10px 0;
     flex-flow: column;
     justify-content: flex-start;
     align-items: center;
+    gap: 40px;
     overflow: hidden scroll;
 }
 
 #feed_content .content{
     display: flex;
     width: 100%;
-    height: 400px;
+    height: 100%;
     flex-flow: column;
     justify-content: center;
     align-items: center;
@@ -137,18 +195,23 @@ main{
 
 #feed_content .content img{
     display: block;
-    width: 100%;
-    height: 360px;
+    width: calc(100% - 8px);
+    height: 440px;
     border-radius: 10px;
-    border: none;
-    outline: none;
-    background-color: var(--border);
+    border: 2px solid transparent;
+    outline: 2px solid var(--border);
+    transition: 0.2s;
+    cursor: pointer;
+}
+
+#feed_content .content img:hover{
+    outline: 2px solid var(--hover);
 }
 
 #feed_content .content .date{
     display: flex;
     width: 100%;
-    height: 30px;
+    height: 50px;
     flex-flow: row;
     justify-content: flex-start;
     align-items: center;
