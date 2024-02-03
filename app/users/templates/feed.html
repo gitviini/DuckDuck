@@ -48,13 +48,13 @@
         return token
     }
 
-    function call(){
-        fetch('{% url "get_feed" %}', {
+    async function call(){
+        const resp = await fetch('{% url "get_feed" %}', {
             method:'GET',
             headers:{'X-CSRFToken':get_csrf()},
         })
-        .then((resp)=>resp.json().then(body=>generate_feed(body)))
-        .catch(error=>console.log(error))
+        const data = await resp.json()
+        return data
     }
 
     function generate_feed(body={}){
@@ -81,7 +81,7 @@
 
     const feed = document.querySelector('#feed_content')
 
-    call()
+    call().then(data=>generate_feed(data))
 
     var date = document.createElement('p')
 </script>

@@ -31,7 +31,7 @@ def login(req):
         name = req.POST['name']
         password = req.POST['password']
 
-        resp = redirect(f'/perfil/{name}')
+        resp = redirect('/perfil')
         resp.set_cookie('name', name)
 
         if not User.objects.filter(username=name).exists():
