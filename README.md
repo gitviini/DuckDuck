@@ -13,6 +13,6 @@ by: [v.ii.n.i](https://instagram.com/v.ii.n.i)
 
 color palette: [colorhunt](https://colorhunt.co/palette/1f2544474f7a81689dffd0ec)
 
-version: 1.3.0
+version: 1.5.0
 
-building: feed request images API
+building: area post UI
