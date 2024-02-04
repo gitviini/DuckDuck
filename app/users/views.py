@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpResponse
 from django.contrib.auth.models import User
 from django.contrib import auth, messages
 from django.contrib.messages import constants
@@ -97,20 +97,50 @@ def perfil(req):
         print(data['bio'])
     name = req.COOKIES['name']
     binary = ''
+    data = {}
     try:
         img = IMGs.objects.get(username=name) 
         binary = img.binary
+
+        data = {
+            'name':name,
+            'binary_perfil':binary,
+            'binary_post':[],
+            'date_post':[],
+            'comment_post':[],
+        }
+
+        querys = imgs_feed.objects.all()
+
+        for query in querys:
+            if query.auth == name:
+                data['binary_post'].append(query.binary)
+                data['date_post'].append(query.date)
+                data['comment_post'].append(query.comments)
     except:
         messages.add_message(
             req, constants.WARNING, 'add your photo'
         )
-    return render(req, template_name='perfil.html', context={'name':name, 'binary':binary})
+    return render(req, template_name='perfil.html', context=data,)
 
 def img(req):
     if req.method == 'GET':
-        img = IMGs.objects.get(username='biel')
-        binary = img.binary
-        return render(req, template_name='perfil.html', context={'binary':binary})
+        name = req.COOKIES['name']
+        data = {
+            'binary':[],
+            'date':[],
+            'comment':[],
+        }
+
+        querys = imgs_feed.objects.all()
+
+        for query in querys:
+            if query.auth == name:
+                data['binary'].append(query.binary)
+                data['date'].append(query.date)
+                data['comment'].append(query.comments)
+
+        return JsonResponse(data=data, safe=False)
     else:
         #print(username, binary)
 
@@ -137,27 +167,38 @@ def feed(req):
     name = req.COOKIES['name']
     img = IMGs.objects.get(username=name) 
     binary = img.binary
-    return render(req, template_name='feed.html', context={'binary':binary})
+    return render(req, template_name='feed.html', context={'binary':binary, 'username':name})
 
 def get_feed(req):
     if req.method == 'GET':
-        print(imgs_feed.objects.all())
-        body = {
-            'img':['holder','holder','holder','holder'],
-            'name':['vini','gold','mari','biel'],
-            'date':['28/01/2006','29/01/2006','10/01/2006','28/01/2005'],
+        querys = imgs_feed.objects.all()
+        data = {
+            'auth':[],
+            'binary':[],
+            'date':[],
+            'comments':[],
         }
-        return JsonResponse(data=body)
+
+        for query in querys:
+            data['auth'].append(query.auth)
+            data['binary'].append(query.binary)
+            data['date'].append(query.date)
+            data['comments'].append(query.comments)
+
+        return JsonResponse(data=data, safe=False)
     else:
         try:
             data = json.loads(req.body)
             #get datas from client side
-            imgs_feed(auth=data['name'],binary=data['binary'],date=data['date'],comments='')
+            print(data)
+            img = imgs_feed(auth=data['username'],binary=data['binary'],date=data['date'],comments='')
+            img.save()
             #send in imgs_feed database model
-            return JsonResponse(data='ok')
+            return HttpResponse('ok')
             #return response
-        except:
-            return JsonResponse(data='fail')
+        except Exception as erro:
+            print(erro)
+            return HttpResponse('error')
     
 def logout(req):
     try:

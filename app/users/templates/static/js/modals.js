@@ -1,5 +1,6 @@
 try{
     const view = document.querySelector('.view')
+    const new_post = documentq.querySelector("#new_post")
     const url = document.querySelector('input[name="url"]')
     const exit = document.querySelector('.exit span')
     const photo = document.querySelector('#photo_perfil')

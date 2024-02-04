@@ -4,7 +4,7 @@
 
 {% block 'header' %}
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
-<link rel="stylesheet" href="{% static 'css/fee.css' %}">
+<link rel="stylesheet" href="{% static 'css/feeds.css' %}">
 <link rel="stylesheet" href="{% static 'css/font-awesome/css/font-awesome.min.css' %}">
 {% endblock 'header' %}
 
@@ -14,7 +14,7 @@
         <div id="left">
             <div id="perfil">
                 <img src="{{ binary }}" alt="" id="photo">
-                <span class="name">gabriel</span>
+                <span id="name">{{ username }}</span>
             </div>
             <div id="chat">
                 <span class="fa fa-keyboard-o fa-2x"></span>
@@ -34,14 +34,17 @@
             <div id="feed_content">
                 <div class="content">
                     <img src="https://i.pinimg.com/564x/5c/ea/d3/5cead3ce68c27ace2ce2a2281a7b824f.jpg" alt="">
-                    <p class="date"><span class="fa fa-calendar"></span>28/01/2006</p>
+                    <p class="date"><span class="fa fa-calendar"></span>28/01/2006 @gab </p>
                 </div>
             </div>
         </div>
         <div id="right"></div>
     </div>
 </main>
-<script>''
+<script>
+    const name = document.querySelector("#perfil")
+
+    name.onclick = ()=>window.location.href = '/perfil'
 
     function get_csrf(){
         token = document.cookie.split('=')[1]
@@ -59,16 +62,16 @@
 
     function generate_feed(body={}){
         try{
-            tam = body.img.length
+            tam = body.auth.length
             for(let n = 0; n < tam; n++){
                 let content = document.createElement('div')
                 content.setAttribute('class','content')
                 let img = document.createElement('img')
-                img.src = body.img[n]
-                img.alt = body.name[n]
+                img.src = body.binary[n]
+                img.alt = body.auth[n]
                 let date = document.createElement('p')
                 date.setAttribute('class','date')
-                date.innerHTML = `<span class='fa fa-calendar'></span>${body.date[n]}`
+                date.innerHTML = `<span class='fa fa-calendar'></span>${body.date[n]} @${body.auth[n]}`
                 content.appendChild(img)
                 content.appendChild(date)
                 feed.appendChild(content)

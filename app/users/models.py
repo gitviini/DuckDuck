@@ -5,13 +5,13 @@ class IMGs(models.Model):
     binary = models.TextField()
 
     def __str__(self):
-        return self.user
+        return self.username
     
 class imgs_feed(models.Model):
     auth = models.TextField()
     binary = models.TextField()
-    date = models.DateField()
+    date = models.TextField()
     comments = models.TextField()
     
     def __str__(self):
-        return self.user
+        return self.auth

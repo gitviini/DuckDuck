@@ -4,7 +4,7 @@
 
 {% block 'header' %}
     <link rel="stylesheet" href="{% static 'css/font-awesome/css/font-awesome.min.css' %}">
-    <link rel="stylesheet" href="{% static 'css/perfil.css' %}">
+    <link rel="stylesheet" href="{% static 'css/per.css' %}">
     <link rel="stylesheet" href="{% static 'css/modal.css' %}">
 {% endblock 'header' %}
 
@@ -16,12 +16,12 @@
         <nav>
             <img src="https://i.pinimg.com/736x/5d/82/5d/5d825d5590e0b0ad9a3024e96ffef5d1.jpg" alt="background" id="background">
             <img src="
-                {% if binary %}
-                    {{binary}}
+                {% if binary_perfil %}
+                    {{binary_perfil}}
                 {% endif %}
             " alt="
-                {% if binary %}
-                    photo
+                {% if binary_perfil %}
+                    {{name}}
                 {% else %}
                     add photo
                 {% endif %}
@@ -35,23 +35,49 @@
                         <p id="add_bio">add your bio <span class="fa fa-pencil"></span></p>
                     {% endif %}
                 </li>
+                <li><button id="new_post">new post</button><input type="file" id="new_file"></li>
             </ul>
         </nav>
     </div>
     <div id="post">
         <p><span class="fa fa-bookmark-o"></span>post</p>
+        <input type="hidden" id="binary_post" value="{{binary_post}}">
+        <input type="hidden" id="date_post" value="{{date_post}}">
+        <input type="hidden" id="comments_post" value="{{comments_post}}">
         <div id="post_content">
-            <div class="content">
-                <img src='' alt=''>
-                                <p><span class="fa fa-calendar"></span>28/01/2006</p>
-            </div>
-            <div class="content">
-                <img src='' alt=''>
-                <p><span class="fa fa-calendar"></span>28/01/2006</p>
-            </div>
         </div>
     </div>
 </main>
-<script src='{% static "js/perfil.js" %}'></script>
+<script src='{% static "js/perfi.js" %}'></script>
 <script src="{% static 'js/modals.js' %}"></script>
+<script>
+    async function get_post(){
+        const resp = await fetch('/img')
+
+        const data = resp.json()
+        return data
+    }
+
+    function generate_post(data={}){
+
+        tam = data.binary.length
+
+        let space = document.querySelector("#post_content")
+
+        for(let n = 0; n < tam; n++){
+            let div = document.createElement('div')
+            div.setAttribute('class','content')
+            let img = document.createElement("img")
+            img.src = data.binary[n]
+            img.alt = ''
+            let date = document.createElement('p')
+            date.innerHTML = `<span class="fa fa-calendar"></span>${data.date[n]}`
+            div.appendChild(img)
+            div.appendChild(date)
+            space.appendChild(div)
+        }
+    }
+
+    get_post().then(data=>generate_post(data))
+</script>
 {% endblock 'body' %}

@@ -169,7 +169,6 @@ main{
     align-items: center;
     color: var(--color);
     border-bottom: 2px solid var(--border);
-    gap: 5px;
 }
 
 #feed_content{
@@ -180,9 +179,9 @@ main{
     flex-flow: column;
     justify-content: flex-start;
     align-items: center;
-    gap: 40px;
     overflow: hidden scroll;
 }
+
 
 #feed_content .content{
     display: flex;
