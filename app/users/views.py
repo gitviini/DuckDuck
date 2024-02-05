@@ -15,7 +15,7 @@ def add_img(username='', binary=''):
         else:
             IMGs.objects.update_or_create(
                 username=username,
-                defaults={'binary':binary})
+                defaults={'binary_photo':binary})
             return 'success'
     except Exception as erro: 
         print(f'add_img:. {erro}')
@@ -92,24 +92,41 @@ def signup(req):
     return render(req, 'signup.html')
 
 def perfil(req):
+    name = req.COOKIES['name']
+    bio = ''
+    binary_photo = ''
+    binary_bg = ''
+    data = {}
+    
     if req.method == 'POST': 
         data = json.loads(req.body)
-        print(data['bio'])
-    name = req.COOKIES['name']
-    binary = ''
-    data = {}
+        try:
+            IMGs.objects.update_or_create(
+                username=name,
+                defaults={'bio':data['bio']}
+            )
+            print('sucess')
+        except Exception as erro: print(erro)
     try:
-        img = IMGs.objects.get(username=name) 
-        binary = img.binary
-
-        data = {
-            'name':name,
-            'binary_perfil':binary,
-            'binary_post':[],
-            'date_post':[],
-            'comment_post':[],
-        }
-
+        img = IMGs.objects.get(username=name)
+        bio = img.bio
+        binary_photo = img.binary_photo
+        binary_bg = img.binary_bg
+    except Exception as erro:
+        print(erro)
+        messages.add_message(
+            req, constants.WARNING, 'add your photo'
+        )
+    data = {
+        'name':name,
+        'bio':bio,
+        'binary_perfil':binary_photo,
+        'binary_bg':binary_bg,
+        'binary_post':[],
+        'date_post':[],
+        'comment_post':[],
+    }
+    try:
         querys = imgs_feed.objects.all()
 
         for query in querys:
@@ -117,11 +134,8 @@ def perfil(req):
                 data['binary_post'].append(query.binary)
                 data['date_post'].append(query.date)
                 data['comment_post'].append(query.comments)
-    except:
-        messages.add_message(
-            req, constants.WARNING, 'add your photo'
-        )
-    return render(req, template_name='perfil.html', context=data,)
+    except: pass
+    return render(req, template_name='perfil.html', context=data)
 
 def img(req):
     if req.method == 'GET':
@@ -166,7 +180,7 @@ def img(req):
 def feed(req):
     name = req.COOKIES['name']
     img = IMGs.objects.get(username=name) 
-    binary = img.binary
+    binary = img.binary_photo
     return render(req, template_name='feed.html', context={'binary':binary, 'username':name})
 
 def get_feed(req):

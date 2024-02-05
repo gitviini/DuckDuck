@@ -15,4 +15,4 @@ color palette: [colorhunt](https://colorhunt.co/palette/1f2544474f7a81689dffd0ec
 
 version: 1.5.0
 
-building: area post UI
+building: comments posts

@@ -4,7 +4,7 @@
 
 {% block 'header' %}
     <link rel="stylesheet" href="{% static 'css/font-awesome/css/font-awesome.min.css' %}">
-    <link rel="stylesheet" href="{% static 'css/per.css' %}">
+    <link rel="stylesheet" href="{% static 'css/perfil.css' %}">
     <link rel="stylesheet" href="{% static 'css/modal.css' %}">
 {% endblock 'header' %}
 
@@ -35,49 +35,24 @@
                         <p id="add_bio">add your bio <span class="fa fa-pencil"></span></p>
                     {% endif %}
                 </li>
-                <li><button id="new_post">new post</button><input type="file" id="new_file"></li>
             </ul>
         </nav>
     </div>
     <div id="post">
         <p><span class="fa fa-bookmark-o"></span>post</p>
+        <input type="file" id="new_file">
+        <label for="new_file" id="add_post"><span class="fa fa-image"></span>add post</label>
         <input type="hidden" id="binary_post" value="{{binary_post}}">
         <input type="hidden" id="date_post" value="{{date_post}}">
         <input type="hidden" id="comments_post" value="{{comments_post}}">
+        {% if binary_post %}
+        {% else %}
+            <p>any posts</p>
+        {% endif %}
         <div id="post_content">
         </div>
     </div>
 </main>
-<script src='{% static "js/perfi.js" %}'></script>
+<script src='{% static "js/perfil.js" %}'></script>
 <script src="{% static 'js/modals.js' %}"></script>
-<script>
-    async function get_post(){
-        const resp = await fetch('/img')
-
-        const data = resp.json()
-        return data
-    }
-
-    function generate_post(data={}){
-
-        tam = data.binary.length
-
-        let space = document.querySelector("#post_content")
-
-        for(let n = 0; n < tam; n++){
-            let div = document.createElement('div')
-            div.setAttribute('class','content')
-            let img = document.createElement("img")
-            img.src = data.binary[n]
-            img.alt = ''
-            let date = document.createElement('p')
-            date.innerHTML = `<span class="fa fa-calendar"></span>${data.date[n]}`
-            div.appendChild(img)
-            div.appendChild(date)
-            space.appendChild(div)
-        }
-    }
-
-    get_post().then(data=>generate_post(data))
-</script>
 {% endblock 'body' %}

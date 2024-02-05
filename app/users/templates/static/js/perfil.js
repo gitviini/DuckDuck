@@ -1,22 +1,58 @@
 const csrf = document.cookie.split('=')[1]
 const new_post = document.querySelector("#new_post")
 const username = document.querySelector("input[name='username']").value
-const add_bio = document.querySelector("#add_bio")
+const bio = document.querySelector("#bio")
 let d = new Date
-const time = `${d.getDay()}/${d.getMonth()}/${d.getFullYear()}`
+const time = `${d.getDate()}/${d.getMonth()+1}/${d.getFullYear()}`
 
-add_bio.addEventListener('click', ()=>{
+async function get_post(){
+    const resp = await fetch('/img')
+
+    const data = resp.json()
+    return data
+}
+
+function generate_post(data={}){
+
+    tam = data.binary.length
+
+    let space = document.querySelector("#post_content")
+
+    for(let n = 0; n < tam; n++){
+        let div = document.createElement('div')
+        div.setAttribute('class','content')
+        let img = document.createElement("img")
+        img.src = data.binary[n]
+        img.alt = ''
+        let date = document.createElement('p')
+        date.innerHTML = `<span class="fa fa-calendar"></span>${data.date[n]}`
+        div.appendChild(img)
+        div.appendChild(date)
+        space.appendChild(div)
+    }
+}
+
+get_post().then(data=>generate_post(data))
+
+bio.addEventListener('click', ()=>{
     value = prompt('new bio')
 
-    fetch(window.location.href, {
-        method:'post',
-        headers:{'X-CSRFToken':get_csrf()},
-        body: JSON.stringify({
-            'bio':value
-        })
-    }).then(resp=>{
-        console.log(resp.status)
-    }).catch(error=>console.log('ERROR:.'+error))
+    if (value == ' ' || value == ''){
+
+    }
+    else{
+        fetch(window.location.href, {
+            method:'post',
+            headers:{'X-CSRFToken':get_csrf()},
+            body: JSON.stringify({
+                'bio':value
+            })
+        }).then(resp=>{
+            if(resp.ok){
+                window.location.reload()
+            }
+        }).catch(error=>console.log('ERROR:.'+error))
+    }
 })
 
 function get_csrf(){
