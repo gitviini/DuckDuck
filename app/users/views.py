@@ -197,16 +197,26 @@ def get_feed(req):
             data['auth'].append(query.auth)
             data['binary'].append(query.binary)
             data['date'].append(query.date)
-            data['comments'].append(query.comments)
+            data['comments'].append(query.comments.split('&&'))
+
+        print(data)
 
         return JsonResponse(data=data, safe=False)
     else:
         try:
             data = json.loads(req.body)
             #get datas from client side
-            print(data)
-            img = imgs_feed(auth=data['username'],binary=data['binary'],date=data['date'],comments='')
-            img.save()
+            if (data['comments'] == ''):
+                img = imgs_feed(auth=data['username'],binary=data['binary'],date=data['date'],comments='')
+                img.save()
+            else:
+                comments = f"{imgs_feed.objects.get(auth=data['username'],binary=data['binary'],date=data['date']).comments}{data['comments']}"
+                print(comments)
+                imgs_feed.objects.update_or_create(
+                    auth=data['username'],
+                    binary=data['binary'],
+                    date=data['date'],
+                    defaults={'comments':comments})
             #send in imgs_feed database model
             return HttpResponse('ok')
             #return response

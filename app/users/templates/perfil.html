@@ -3,7 +3,6 @@
 {% load static %}
 
 {% block 'header' %}
-    <link rel="stylesheet" href="{% static 'css/font-awesome/css/font-awesome.min.css' %}">
     <link rel="stylesheet" href="{% static 'css/perfil.css' %}">
     <link rel="stylesheet" href="{% static 'css/modal.css' %}">
 {% endblock 'header' %}
@@ -35,6 +34,7 @@
                         <p id="add_bio">add your bio <span class="fa fa-pencil"></span></p>
                     {% endif %}
                 </li>
+                <li><a href="{% url 'feed' %}">feed</a></li>
             </ul>
         </nav>
     </div>

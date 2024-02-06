@@ -12,8 +12,8 @@
 <img src="{% static 'img/duck.svg' %}" alt="">
 <form action="{% url 'login' %}" method="post"> {% csrf_token %}
     <h1>login</h1>
-    <input type="text" name="name" placeholder="name" minlength="4" maxlength="20" required>
-    <input type="password" name="password" placeholder="password" minlength="8" maxlength="20" required>
+    <input type="text" name="name" placeholder="name" minlength="4" maxlength="20" required autocomplete>
+    <input type="password" name="password" placeholder="password" minlength="8" maxlength="20" required autocomplete>
     <button>send</button>
     <p class="pop">are you not sign? let's <a href="{% url 'signup' %}">signup</a></p>
 </form>

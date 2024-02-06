@@ -57,7 +57,7 @@ bio.addEventListener('click', ()=>{
 
 function get_csrf(){
     let tokens = document.cookie.split('; ')
-    for(token in tokens){
+    for(let token in tokens){
         resp = tokens[token].split('=')
         if(resp[0] == 'csrftoken'){
             return resp[1]
@@ -121,7 +121,7 @@ file.onchange = () => {
             date:time,
         }
 
-        fetch('/get_feed',{
+        fetch('http://localhost:8000/get_feed/',{
             method:'POST',
             headers:{'X-CSRFToken':get_csrf()},
             body:JSON.stringify(data),
