@@ -164,7 +164,6 @@ def img(req):
         binary = data['binary']
 
         message = add_img(username, binary)
-        print(message)
         if message != None:
             match message:
                 case 'failed':
@@ -199,14 +198,12 @@ def get_feed(req):
             data['date'].append(query.date)
             data['comments'].append(query.comments.split('&&'))
 
-        print(data)
-
         return JsonResponse(data=data, safe=False)
     else:
         try:
             data = json.loads(req.body)
             #get datas from client side
-            if (data['comments'] == ''):
+            if (data['comments'] in ('',None)):
                 img = imgs_feed(auth=data['username'],binary=data['binary'],date=data['date'],comments='')
                 img.save()
             else:

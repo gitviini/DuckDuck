@@ -119,6 +119,7 @@ file.onchange = () => {
             username:username,
             binary: load.target.result,
             date:time,
+            comments:'',
         }
 
         fetch('http://localhost:8000/get_feed/',{
