@@ -5,21 +5,8 @@ from django.contrib import auth, messages
 from django.contrib.messages import constants
 from users.models import IMGs
 from users.models import imgs_feed
+from .util import get_img_all
 import json
-
-#UTILS
-def add_img(username='', binary=''):
-    try:
-        if username == '' or binary == '':
-            return 'failed'
-        else:
-            IMGs.objects.update_or_create(
-                username=username,
-                defaults={'binary_photo':binary})
-            return 'success'
-    except Exception as erro: 
-        print(f'add_img:. {erro}')
-        return None
 
 def index(req):
     return redirect('/login')
@@ -75,7 +62,9 @@ def signup(req):
                         messages.add_message(
                             req, constants.SUCCESS, 'sigin sucess'
                         )
-                        return redirect(f'/perfil/{name}')
+                        resp = redirect(f'/perfil/')
+                        resp.cookies['name'] = name
+                        return resp
                     except:
                         messages.add_message(
                             req, constants.ERROR, 'server failed'
@@ -97,16 +86,7 @@ def perfil(req):
     binary_photo = ''
     binary_bg = ''
     data = {}
-    
-    if req.method == 'POST': 
-        data = json.loads(req.body)
-        try:
-            IMGs.objects.update_or_create(
-                username=name,
-                defaults={'bio':data['bio']}
-            )
-            print('sucess')
-        except Exception as erro: print(erro)
+
     try:
         img = IMGs.objects.get(username=name)
         bio = img.bio
@@ -134,100 +114,15 @@ def perfil(req):
                 data['binary_post'].append(query.binary)
                 data['date_post'].append(query.date)
                 data['comment_post'].append(query.comments)
-    except: pass
+    except Exception as erro: print(erro)
     return render(req, template_name='perfil.html', context=data)
-
-def img(req):
-    if req.method == 'GET':
-        name = req.COOKIES['name']
-        data = {
-            'binary':[],
-            'date':[],
-            'comment':[],
-        }
-
-        querys = imgs_feed.objects.all()
-
-        for query in querys:
-            if query.auth == name:
-                data['binary'].append(query.binary)
-                data['date'].append(query.date)
-                data['comment'].append(query.comments)
-
-        return JsonResponse(data=data, safe=False)
-    else:
-        #print(username, binary)
-
-        data = json.loads(req.body)
-
-        username = data['username']
-        binary = data['binary']
-
-        message = add_img(username, binary)
-        if message != None:
-            match message:
-                case 'failed':
-                    messages.add_message(
-                        req, constants.ERROR, message
-                    )
-                case 'success':
-                    messages.add_message(
-                        req, constants.SUCCESS, message
-                    )
-    return render(req, template_name='perfil.html')
 
 def feed(req):
     name = req.COOKIES['name']
     img = IMGs.objects.get(username=name) 
     binary = img.binary_photo
     return render(req, template_name='feed.html', context={'binary':binary, 'username':name})
-
-def get_feed(req):
-    if req.method == 'GET':
-        querys = imgs_feed.objects.all()
-        data = {
-            'auth':[],
-            'binary':[],
-            'date':[],
-            'comments':[],
-        }
-
-        for query in querys:
-            data['auth'].append(query.auth)
-            data['binary'].append(query.binary)
-            data['date'].append(query.date)
-            data['comments'].append(query.comments.split('&&'))
-
-        return JsonResponse(data=data, safe=False)
-    else:
-        try:
-            data = json.loads(req.body)
-            #get datas from client side
-            if (data['comments'] in ('',None)):
-                img = imgs_feed(auth=data['username'],binary=data['binary'],date=data['date'],comments='')
-                img.save()
-            else:
-                comments = f"{imgs_feed.objects.get(auth=data['username'],binary=data['binary'],date=data['date']).comments}{data['comments']}"
-                print(comments)
-                imgs_feed.objects.update_or_create(
-                    auth=data['username'],
-                    binary=data['binary'],
-                    date=data['date'],
-                    defaults={'comments':comments})
-            #send in imgs_feed database model
-            return HttpResponse('ok')
-            #return response
-        except Exception as erro:
-            print(erro)
-            return HttpResponse('error')
     
 def logout(req):
-    try:
-        messages.add_message(
-            req, constants.SUCCESS, f'user: {req.session["name"]} logout'
-        )
-        del req.session['name']
-        print(req.session['name'])
-        return redirect('/login')
-    except: pass
+    pass
     return redirect('/login')

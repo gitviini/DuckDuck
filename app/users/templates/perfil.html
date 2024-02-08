@@ -42,17 +42,10 @@
         <p><span class="fa fa-bookmark-o"></span>post</p>
         <input type="file" id="new_file">
         <label for="new_file" id="add_post"><span class="fa fa-image"></span>add post</label>
-        <input type="hidden" id="binary_post" value="{{binary_post}}">
-        <input type="hidden" id="date_post" value="{{date_post}}">
-        <input type="hidden" id="comments_post" value="{{comments_post}}">
-        {% if binary_post %}
-        {% else %}
-            <p>any posts</p>
-        {% endif %}
         <div id="post_content">
         </div>
     </div>
 </main>
-<script src='{% static "js/pe.js" %}'></script>
+<script src='{% static "js/perfil.js" %}'></script>
 <script src="{% static 'js/modals.js' %}"></script>
 {% endblock 'body' %}

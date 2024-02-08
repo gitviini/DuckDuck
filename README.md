@@ -15,6 +15,6 @@ by: [v.ii.n.i](https://instagram.com/v.ii.n.i)
 
 color palette: [colorhunt](https://colorhunt.co/palette/1f2544474f7a81689dffd0ec)
 
-version: 1.8.0
+version: 1.9.0
 
-building: delete posts.
+building: delete or logout account.

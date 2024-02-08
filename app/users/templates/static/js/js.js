@@ -23,10 +23,30 @@ function get_cookie(mode=0){
     }
 } 
 
+function add_comments(data={},n=0){
+    console.log(data)
+    modal.classList.add('click')
+    let modal_comments = document.querySelector('#modal_body .comments')
+    modal_comments.innerHTML = ''
+    let img = document.querySelector("#modal_body img")
+    img.src = data.binary[n]
+    document.querySelector('#modal_body .date').innerHTML = `<span class="fa fa-calendar"></span>${data.date[n]} @${data.auth[n]}`
+    data.comments[n].forEach(element=>{
+        let modal_comment = document.createElement('p')
+        modal_comment.setAttribute('class','comment')
+        modal_comment.innerText = element
+        if (element != '' || element != ''){
+            modal_comments.appendChild(modal_comment)
+        }
+    })
+}
+
 async function call(){
-    const resp = await fetch('http://localhost:8000/get_feed/', {
+    const resp = await fetch('/center/', {
         method:'GET',
-        headers:{'X-CSRFToken':get_cookie()},
+        headers:{
+            'Content-Type':'text/html; mode=get_post_feed',
+        },
     })
     const data = await resp.json()
     return data
@@ -39,20 +59,22 @@ async function post_comment(auth='',binary='',date='',reply=''){
         'date':date,
         'comments':reply,
     }
-    fetch('/get_feed/',
+    const resp = await fetch('/center/',
     {
         method:'post',
-        headers:{'X-CSRFToken':get_cookie()},
+        headers:{
+            'Content-Type':'form-data; mode=comment_post',
+            'X-CSRFToken':get_cookie(),
+        },
         body:JSON.stringify(data)
-    }).then(resp=>{
-        if(resp.status == 200){
-            window.location.reload()
-        }
     })
+    const respdata = await resp.json()
+    return respdata
 }
 
 function generate_feed(data={}){
     try{
+        feed.innerHTML = ''
         tam = data.auth.length
         for(let n = 0; n < tam; n++){
             let content = document.createElement('div')
@@ -82,35 +104,29 @@ function generate_feed(data={}){
             comments_container.appendChild(comments)
             content.appendChild(comments_container)
             content.onclick = () =>{
-                modal.classList.add('click')
-                let modal_comments = document.querySelector('#modal_body .comments')
-                let img = document.querySelector("#modal_body img")
-                img.src = data.binary[n]
-                document.querySelector('#modal_body .date').innerHTML = `<span class="fa fa-calendar"></span>${data.date[n]} @${data.auth[n]}`
-                data.comments[n].forEach(element=>{
-                    let modal_comment = document.createElement('p')
-                    modal_comment.setAttribute('class','comment')
-                    modal_comment.innerText = element
-                    if (element != ''){
-                        modal_comments.appendChild(modal_comment)
-                    }
-                })
+                add_comments(data,n)
                 document.querySelector("#message button").onclick = () =>{
                     let message = document.querySelector('#send_message').value
                     if (message != '' && message != ' ' && message != '<empty string>' && message != null && message.indexOf('&') == -1){
                         post_comment(data.auth[n],data.binary[n],data.date[n],`@${get_cookie(1)} ${message}&&`)
+                        .then(data=>{
+                            if (data) {
+                                generate_feed(data)
+                                add_comments(data,n)
+                            }   
+                        })
+                        }
                     }
                 }
-            }
 
             let effect = ''
         
             content.onmouseover = () =>{
                 let i = 0
+                let tam = comments.children.length
+                console.log(tam)
                 effect = setInterval(() => {
-                    let tam = comments.children.length
                     if (i < tam){
-                        console.log(i)
                         comments.style.top = `-${49*(i)}px`
                         i++
                     }
@@ -118,14 +134,13 @@ function generate_feed(data={}){
                         i = 0
                     }
                     console.log(i)
-                    
                 }, 1000)
             }
             content.onmouseout = () =>{
                 clearInterval(effect)
             }
+            }
         }
-    }
     catch{
         error=>console.log(error)
     }
