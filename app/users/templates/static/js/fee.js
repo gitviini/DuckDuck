@@ -4,6 +4,7 @@ const modal = document.querySelector('#right')
 
 document.querySelector("#perfil").onclick = ()=> window.location.href = '/perfil'
 
+
 function get_cookie(mode=0){
     let tokens = document.cookie.split('; ')
     for(let token in tokens){
@@ -14,14 +15,19 @@ function get_cookie(mode=0){
                     return resp[1]
                 }
                 else{}
+                break
             case 1:
-                if(resp[0] == 'name'){
+                if(resp[0] == 'name'){s
                     return resp[1]
                 }
                 else{}
+                break
+            default: 
+                console.log('get_cookie:. mode not found')
+                break
         }
     }
-} 
+}
 
 function add_comments(data={},n=0){
     console.log(data)

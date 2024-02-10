@@ -53,8 +53,8 @@ function generate_post(data={}){
         post_content.appendChild(content)
 
         content.onclick = () =>{
-            let confirm = Number(prompt('do you want delete your photograph?\n0)YES\n1)NO\n:'))
-            if (confirm == 0){
+            let confirm = prompt('do you want delete your photograph?\n0)YES\n1)NO\n:')
+            if (confirm && Number(confirm).toFixed(0) == 0 && confirm.indexOf(' ') == -1){
                 delete_post(data,n)
                 .then(data=>generate_post(data))
             }
@@ -98,11 +98,16 @@ function get_cookie(mode=0){
                     return resp[1]
                 }
                 else{}
+                break
             case 1:
                 if(resp[0] == 'name'){
                     return resp[1]
                 }
                 else{}
+                break
+            default: 
+                console.log('get_cookie:. mode not found')
+                break
         }
     }
 } 
