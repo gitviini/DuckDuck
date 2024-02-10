@@ -19,7 +19,7 @@ async function get_post(){
 
 async function delete_post(data={},n=''){
     const req = await fetch('/center/',{
-        method:'POST',
+        method:'DELETE',
         headers:{
             'Content-Type':'form-data; mode=delete_post',
             'X-CSRFToken':get_cookie(),

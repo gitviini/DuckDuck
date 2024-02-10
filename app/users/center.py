@@ -1,3 +1,5 @@
+from django.contrib.auth.models import User, UserManager
+from django.contrib import auth
 from users.models import imgs_feed, IMGs
 from django.http import JsonResponse
 from .util import get_img_all
@@ -32,8 +34,20 @@ def hub(req):
             match mode:
                 case 'delete_post':
                     return delete_post(req)
-        
+                case 'delete_account':
+                    return delete_account(req)
+                case _:
+                    return JsonResponse({'resp':f'error DELETE:. service "{mode}" not found'}, safe=False)
     except Exception as erro: print(f'hub:. {erro}')
+    return JsonResponse({'resp':'ok'}, safe=False)
+
+def delete_account(req=''):
+    try:
+        data = json.loads(req.body)
+        user = auth.authenticate(req, username=data['username'], password=data['password'])
+        user.delete()
+        return JsonResponse({'resp':'user deleted'}, safe=False)
+    except Exception as erro: print(f'delete_account:. {erro}')
     return JsonResponse({'resp':'ok'}, safe=False)
 
 def delete_post(req=''):
