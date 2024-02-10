@@ -3,8 +3,9 @@
 {% load static %}
 
 {% block 'header' %}
-<link rel="stylesheet" href="{% static 'css/csee.css' %}">
+<link rel="stylesheet" href="{% static 'css/fee.css' %}">
 <link rel="stylesheet" href="{% static 'css/font-awesome/css/font-awesome.min.css' %}">
+<script src="{% static 'js/fee.js' %}" defer></script>
 {% endblock 'header' %}
 
 {% block 'body' %}
@@ -26,7 +27,6 @@
                 </div>
             </div>
             <div id="config">
-                <p><span class="fa fa-cog"></span>settings</p>
             </div>
         </div>
         <div id="middle">
@@ -53,7 +53,6 @@
         </div>
     </div>
 </main>
-<script src="{% static 'js/fee.js' %}"></script>
 <script>
     data = {
         username:'gab',

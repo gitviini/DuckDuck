@@ -49,6 +49,7 @@ main{
     flex-flow: column;
     justify-content: flex-start;
     align-items: center;
+    gap: 20px;
 }
 
 img{
@@ -82,7 +83,7 @@ img{
     transition: 0.2s;
 }
 
-#perfil ul{
+#info{
     position: relative;
     top: -65px;
     display: flex;
@@ -91,7 +92,8 @@ img{
     list-style: none;
     flex-flow: column;
     justify-content: center;
-    align-items: center;
+    align-items: flex-start;
+    gap: 15px;
 }
 
 .button, button{
@@ -117,6 +119,10 @@ img{
     color: var(--color);
 }
 
+#name{
+    align-self: center;
+}
+
 #name::before{
     content: '@';
 }
@@ -130,6 +136,19 @@ img{
     align-self: flex-start;
     cursor: pointer;
     padding: 10px;
+}
+
+#settings{
+    align-self: flex-start;
+}
+
+#settings_container{
+    display: flex;
+    flex-flow: column;
+    padding:  0 0 20px 0;
+    align-self: flex-start;
+    list-style: none;
+    gap: 20px;
 }
 
 #post{

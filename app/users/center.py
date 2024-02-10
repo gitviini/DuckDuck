@@ -7,23 +7,32 @@ import json
 def hub(req):
     try:
         mode = req.content_params['mode']
-        match mode:
-            case 'delete_post':
-                return delete_post(req)
-            case 'get_post_perfil':
-                return get_post_perfil(req)
-            case 'get_post_feed':
-                return get_post_feed(req)
-            case 'bio_perfil':
-                return bio_perfil(req)
-            case 'photo_perfil':
-                return photo_perfil(req)
-            case 'img_post':
-                return img_post(req)
-            case 'comment_post':
-                return comment_post(req)
-            case _:
-                return JsonResponse({'resp':f'error:. service "{mode}" not found'}, safe=False)
+        if req.method == 'POST':
+            match mode:
+                case 'bio_perfil':
+                    return bio_perfil(req)
+                case 'photo_perfil':
+                    return photo_perfil(req)
+                case 'img_post':
+                    return img_post(req)
+                case 'comment_post':
+                    return comment_post(req)
+                case _:
+                    return JsonResponse({'resp':f'error POST:. service "{mode}" not found'}, safe=False)
+        elif req.method == 'GET':
+            match mode:
+                case 'get_post_perfil':
+                    return get_post_perfil(req)
+                case 'get_post_feed':
+                    return get_post_feed(req)
+                case _:
+                    return JsonResponse({'resp':f'error GET:. service "{mode}" not found'}, safe=False)
+                
+        elif req.method == 'DELETE':
+            match mode:
+                case 'delete_post':
+                    return delete_post(req)
+        
     except Exception as erro: print(f'hub:. {erro}')
     return JsonResponse({'resp':'ok'}, safe=False)
 

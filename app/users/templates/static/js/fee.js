@@ -17,7 +17,7 @@ function get_cookie(mode=0){
                 else{}
                 break
             case 1:
-                if(resp[0] == 'name'){s
+                if(resp[0] == 'name'){
                     return resp[1]
                 }
                 else{}
@@ -133,7 +133,7 @@ function generate_feed(data={}){
                 console.log(tam)
                 effect = setInterval(() => {
                     if (i < tam){
-                        comments.style.top = `-${49*(i)}px`
+                        comments.style.top = `-${50*(i)}px`
                         i++
                     }
                     else{

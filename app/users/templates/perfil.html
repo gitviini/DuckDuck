@@ -3,7 +3,7 @@
 {% load static %}
 
 {% block 'header' %}
-    <link rel="stylesheet" href="{% static 'css/perfil.css' %}">
+    <link rel="stylesheet" href="{% static 'css/perfl.css' %}">
     <link rel="stylesheet" href="{% static 'css/modal.css' %}">
 {% endblock 'header' %}
 
@@ -25,7 +25,7 @@
                     add photo
                 {% endif %}
             " id="photo_perfil">
-            <ul>
+            <ul id="info">
                 <li id="name">{{name}}</li>
                 <li id="bio">
                     {% if bio %}
@@ -35,6 +35,11 @@
                     {% endif %}
                 </li>
                 <li><a class="button" href="{% url 'feed' %}">feed</a></li>
+            </ul>
+            <p id="settings"><span class="fa fa-cog"></span>settings</p>
+            <ul id="settings_container">
+                <li id="delete_account"><a class="button" href="#">deletar</a></li>
+                <li id="end_session"><a class="button" href="#">encerrar sessão</a></li>
             </ul>
         </nav>
     </div>
@@ -46,6 +51,66 @@
         </div>
     </div>
 </main>
+<script>
+    const delete_account = document.querySelector("#delete_account")
+    const end_session = document.querySelector("#end_session")
+
+    function get_cookie(mode=0){
+        let tokens = document.cookie.split('; ')
+        for(let token in tokens){
+            resp = tokens[token].split('=')
+            switch (mode){
+                case 0:
+                    if(resp[0] == 'csrftoken'){
+                        return resp[1]
+                    }
+                    else{}
+                    break
+                case 1:
+                    if(resp[0] == 'name'){
+                        return resp[1]
+                    }
+                    else{}
+                    break
+                default: 
+                    console.log('get_cookie:. mode not found')
+                    break
+            }
+        }
+    } 
+
+    async function request_delete(data={}){
+        const resp = await fetch('/center/',{
+            method:'delete',
+            headers:{
+                'Content-Type':'form-data; mode=delete_account',
+                'X-CSRFToken':get_cookie(),
+            },
+            body:JSON.stringify(data)
+        })
+
+        return resp.json()
+    }
+
+    delete_account.onclick = () =>{
+        const data = {
+            username:get_cookie(1),
+            password:''
+        }
+        data.password = prompt('digite sua senha:')
+
+        request_delete(data)
+        .then(data=>{
+            console.log(data)
+        })
+        
+    }
+
+    end_session.onclick = () =>{
+
+    }
+
+</script>
 <script src='{% static "js/perfil.js" %}'></script>
 <script src="{% static 'js/modals.js' %}"></script>
 {% endblock 'body' %}

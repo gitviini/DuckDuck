@@ -1,3 +1,10 @@
+:root{
+    --bg: #1F2544;
+    --border: #FFD0EC;
+    --hover: #81689D;
+    --color: #fff;
+    --gray: #aaa;
+}
 *{
     padding: 0;
     margin: 0;
@@ -16,7 +23,7 @@ body{
     flex-flow: column;
     justify-content: center;
     align-items: center;
-    background-color: #345;
+    background-color: var(--bg);
 }
 
 form{
@@ -27,7 +34,7 @@ form{
 }
 
 h1{
-    color: #ddd;
+    color: var(--color);
     padding: 15px;
 }
 
@@ -42,7 +49,7 @@ input, button{
 .pop{
     position: fixed;
     bottom: 10px;
-    color: #ddd;
+    color: var(--color);
 }
 
 .pop a{
