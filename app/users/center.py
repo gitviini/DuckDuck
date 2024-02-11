@@ -63,7 +63,7 @@ def delete_post(req=''):
 
 def get_post_perfil(req=''):
     try:
-        username = req.COOKIES['name']
+        username = req.headers['Referer'].split('/')[-2]
         data = {
             'binary':[],
             'date':[],

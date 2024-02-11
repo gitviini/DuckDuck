@@ -1,5 +1,6 @@
 from django.shortcuts import render, redirect
 from django.http import JsonResponse, HttpResponse
+from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.contrib import auth, messages
 from django.contrib.messages import constants
@@ -18,9 +19,6 @@ def login(req):
         name = req.POST['name']
         password = req.POST['password']
 
-        resp = redirect('/perfil')
-        resp.set_cookie('name', name)
-
         if not User.objects.filter(username=name).exists():
             messages.add_message(
                 req, constants.ERROR, 'user no exists'
@@ -33,6 +31,9 @@ def login(req):
                     messages.add_message(
                         req, constants.SUCCESS, f'user: {name} loged'
                     )
+                    resp = redirect(f'/perfil/{name}')
+                    resp.set_cookie('name', name)
+                    req.session['username'] = name
                     return resp
                 except:
                     messages.add_message(
@@ -62,8 +63,9 @@ def signup(req):
                         messages.add_message(
                             req, constants.SUCCESS, 'sigin sucess'
                         )
-                        resp = redirect(f'/perfil/')
+                        resp = redirect(f'/perfil/{name}')
                         resp.cookies['name'] = name
+                        req.session['username'] = name
                         return resp
                     except:
                         messages.add_message(
@@ -80,49 +82,49 @@ def signup(req):
 
     return render(req, 'signup.html')
 
-def perfil(req):
-    name = req.COOKIES['name']
-    bio = ''
-    binary_photo = ''
-    binary_bg = ''
-    data = {}
-
-    try:
-        img = IMGs.objects.get(username=name)
-        bio = img.bio
-        binary_photo = img.binary_photo
-        binary_bg = img.binary_bg
-    except Exception as erro:
-        print(erro)
-        messages.add_message(
-            req, constants.WARNING, 'add your photo'
-        )
+@login_required
+def perfil(req, username=''):
+    
     data = {
-        'name':name,
-        'bio':bio,
-        'binary_perfil':binary_photo,
-        'binary_bg':binary_bg,
-        'binary_post':[],
-        'date_post':[],
-        'comment_post':[],
+        'name':username,
+        'bio':'',
+        'binary_perfil':'',
+        'binary_bg':'',
     }
-    try:
-        querys = imgs_feed.objects.all()
 
-        for query in querys:
-            if query.auth == name:
-                data['binary_post'].append(query.binary)
-                data['date_post'].append(query.date)
-                data['comment_post'].append(query.comments)
-    except Exception as erro: print(erro)
-    return render(req, template_name='perfil.html', context=data)
+    exists = User.objects.filter(username=username).exists()
 
+    if exists:
+
+        if req.user.username == username: print('profile')
+        
+        else: print('no your profile')
+        
+        try:
+            img = IMGs.objects.get(username=username)
+            data['bio'] = img.bio
+            data['binary_perfil'] = img.binary_photo
+            data['binary_bg'] = img.binary_bg
+        except Exception as erro:
+            print(erro)
+            messages.add_message(
+                req, constants.WARNING, 'add your photo'
+            )
+        return render(req, template_name='perfil.html', context=data)
+    else:
+        return HttpResponse("""<h2>page not found</h2><br><p>return</p> """)
+
+@login_required
 def feed(req):
-    name = req.COOKIES['name']
-    img = IMGs.objects.get(username=name) 
+    name = req.session['username']
+    img = IMGs.objects.get(username=name)
     binary = img.binary_photo
     return render(req, template_name='feed.html', context={'binary':binary, 'username':name})
     
+@login_required
 def logout(req):
-    pass
+    try:
+        print(auth.logout(req))
+    except Exception as erro:
+        print(erro)
     return redirect('/login')
