@@ -31,7 +31,7 @@ def login(req):
                     messages.add_message(
                         req, constants.SUCCESS, f'user: {name} loged'
                     )
-                    resp = redirect(f'/perfil/{name}')
+                    resp = redirect(f'/{name}/')
                     resp.set_cookie('name', name)
                     req.session['username'] = name
                     return resp
@@ -63,7 +63,7 @@ def signup(req):
                         messages.add_message(
                             req, constants.SUCCESS, 'sigin sucess'
                         )
-                        resp = redirect(f'/perfil/{name}')
+                        resp = redirect(f'/{name}/')
                         resp.cookies['name'] = name
                         req.session['username'] = name
                         return resp
@@ -84,7 +84,6 @@ def signup(req):
 
 @login_required
 def perfil(req, username=''):
-    
     data = {
         'name':username,
         'bio':'',
@@ -96,10 +95,6 @@ def perfil(req, username=''):
 
     if exists:
 
-        if req.user.username == username: print('profile')
-        
-        else: print('no your profile')
-        
         try:
             img = IMGs.objects.get(username=username)
             data['bio'] = img.bio
@@ -107,10 +102,9 @@ def perfil(req, username=''):
             data['binary_bg'] = img.binary_bg
         except Exception as erro:
             print(erro)
-            messages.add_message(
-                req, constants.WARNING, 'add your photo'
-            )
-        return render(req, template_name='perfil.html', context=data)
+
+        if req.user.username == username: return render(req, template_name='perfil.html', context=data)
+        else: return render(req, template_name='visit.html', content=data)
     else:
         return HttpResponse("""<h2>page not found</h2><br><p>return</p> """)
 
@@ -124,7 +118,8 @@ def feed(req):
 @login_required
 def logout(req):
     try:
-        print(auth.logout(req))
+        auth.logout(req)
+        return redirect('/login')
     except Exception as erro:
         print(erro)
-    return redirect('/login')
+        return JsonResponse({'resp':"logout:. user logout failed "}, safe=False) 

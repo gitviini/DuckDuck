@@ -1,4 +1,3 @@
-const csrf = document.cookie.split('=')[1]
 const new_post = document.querySelector("#new_post")
 const username = document.querySelector("input[name='username']").value
 const bio = document.querySelector("#bio")

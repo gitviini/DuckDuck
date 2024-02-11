@@ -22,9 +22,7 @@ MESSAGE_TAGS = {
     constants.WARNING: 'alert-warning',
 }
 
-LOGIN_URL = [
-    '/'
-]
+LOGIN_URL = '/'
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent

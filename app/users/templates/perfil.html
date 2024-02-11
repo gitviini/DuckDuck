@@ -3,7 +3,7 @@
 {% load static %}
 
 {% block 'header' %}
-    <link rel="stylesheet" href="{% static 'css/perfl.css' %}">
+    <link rel="stylesheet" href="{% static 'css/perfil.css' %}">
     <link rel="stylesheet" href="{% static 'css/modal.css' %}">
     <script src='{% static "js/perfil.js" %}' defer></script>
     <script src="{% static 'js/modals.js' %}" defer></script>
@@ -109,7 +109,10 @@
     }
 
     end_session.onclick = () =>{
-
+        let confirm = Number(prompt('do you want logout account?\n0)NO\n1)YES\n:'))
+        if (confirm == 1){
+            window.location.href = '/logout/'
+        }
     }
 
 </script>
