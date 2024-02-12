@@ -103,7 +103,12 @@
 
         request_delete(data)
         .then(data=>{
-            console.log(data)
+            if (data.resp = 'user deleted'){
+                window.location.href = '/'
+            }
+            else{
+                alert('delete account:. error')
+            }
         })
         
     }

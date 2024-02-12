@@ -45,7 +45,9 @@ def delete_account(req=''):
     try:
         data = json.loads(req.body)
         user = auth.authenticate(req, username=data['username'], password=data['password'])
+        imgs = IMGs.objects.get(username=data['username'])
         user.delete()
+        imgs.delete()
         return JsonResponse({'resp':'user deleted'}, safe=False)
     except Exception as erro: print(f'delete_account:. {erro}')
     return JsonResponse({'resp':'ok'}, safe=False)

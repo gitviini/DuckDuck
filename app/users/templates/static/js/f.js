@@ -4,7 +4,6 @@ const modal = document.querySelector('#right')
 
 document.querySelector("#perfil").onclick = ()=> window.location.href = `/perfil/${get_cookie(1)}/`
 
-
 function get_cookie(mode=0){
     let tokens = document.cookie.split('; ')
     for(let token in tokens){
@@ -41,6 +40,7 @@ function add_comments(data={},n=0){
         let modal_comment = document.createElement('p')
         modal_comment.setAttribute('class','comment')
         modal_comment.innerText = element
+        console.log(data.auth[n])
         if (element != '' || element != ''){
             modal_comments.appendChild(modal_comment)
         }
