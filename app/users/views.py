@@ -31,7 +31,7 @@ def login(req):
                     messages.add_message(
                         req, constants.SUCCESS, f'user: {name} loged'
                     )
-                    resp = redirect(f'/{name}/')
+                    resp = redirect(f'/perfil/{name}/')
                     resp.set_cookie('name', name)
                     req.session['username'] = name
                     return resp
@@ -63,7 +63,7 @@ def signup(req):
                         messages.add_message(
                             req, constants.SUCCESS, 'sigin sucess'
                         )
-                        resp = redirect(f'/{name}/')
+                        resp = redirect(f'/perfil/{name}/')
                         resp.cookies['name'] = name
                         req.session['username'] = name
                         return resp
@@ -77,7 +77,7 @@ def signup(req):
                     )
         else:
             messages.add_message(
-                req, constants.ERROR, 'passwords don´t match'
+                req, constants.ERROR, "passwords don't match"
             )
 
     return render(req, 'signup.html')
@@ -100,11 +100,13 @@ def perfil(req, username=''):
             data['bio'] = img.bio
             data['binary_perfil'] = img.binary_photo
             data['binary_bg'] = img.binary_bg
+
+            if req.user.username == username: 
+                return render(req, template_name='perfil.html', context=data)
+            else: 
+                return render(req, template_name='visits.html', context=data)
         except Exception as erro:
             print(erro)
-
-        if req.user.username == username: return render(req, template_name='perfil.html', context=data)
-        else: return render(req, template_name='visit.html', content=data)
     else:
         return HttpResponse("""<h2>page not found</h2><br><p>return</p> """)
 

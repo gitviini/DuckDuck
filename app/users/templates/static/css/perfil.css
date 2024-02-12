@@ -2,7 +2,6 @@
     scroll-behavior: smooth;
     scrollbar-width: thin;
     color: var(--color);
-    font-size: 18px;
 }
 
 *{
@@ -15,6 +14,7 @@
     --gray: #aaa;
     box-sizing: border-box;
     scrollbar-color: rgba(0,0,0,0.2) var(--bg);
+    font-size: 18px;
 }
 
 html, body{

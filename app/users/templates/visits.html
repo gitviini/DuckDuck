@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+
+{% load static %}
+
+{% block 'header' %}
+    <link rel="stylesheet" href="{% static 'css/perfil.css' %}">
+    <script src="{% static 'js/visits.js' %}" defer></script>
+{% endblock 'header' %}
+
+{% block 'body' %}
+<main>
+    <div id="perfil">
+        <nav>
+            <img src="https://i.pinimg.com/736x/5d/82/5d/5d825d5590e0b0ad9a3024e96ffef5d1.jpg" alt="background" id="background">
+            <img src="
+                {% if binary_perfil %}
+                    {{binary_perfil}}
+                {% endif %}
+            " alt="
+                {% if binary_perfil %}
+                    {{name}}
+                {% else %}
+                    add photo
+                {% endif %}
+            " id="photo_perfil">
+            <ul id="info">
+                <li id="name">{{name}}</li>
+                <li id="bio">
+                    {% if bio %}
+                        {{bio}}
+                    {% else %}
+                        <p id="add_bio">add your bio <span class="fa fa-pencil"></span></p>
+                    {% endif %}
+                </li>
+                <li><a class="button" href="{% url 'feed' %}">feed</a></li>
+            </ul>
+        </nav>
+    </div>
+    <div id="post">
+        <p><span class="fa fa-bookmark-o"></span>post</p>
+        <div id="post_content">
+        </div>
+    </div>
+</main>
+{% endblock 'body' %}

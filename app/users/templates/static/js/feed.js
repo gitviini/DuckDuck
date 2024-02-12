@@ -2,7 +2,7 @@ const feed = document.querySelector('#feed_content')
 const posts = document.querySelectorAll("#middle .content")
 const modal = document.querySelector('#right')
 
-document.querySelector("#perfil").onclick = ()=> window.location.href = `/${get_cookie(1)}/`
+document.querySelector("#perfil").onclick = ()=> window.location.href = `/perfil/${get_cookie(1)}/`
 
 
 function get_cookie(mode=0){
